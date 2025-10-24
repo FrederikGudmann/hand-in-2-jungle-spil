@@ -14,8 +14,21 @@ scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile`, function (sprite, lo
     })
     tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`transparency16`)
 })
-function waterWave () {
-    waterWave2 = sprites.create(img`
+scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile3`, function (sprite, location) {
+    controller.moveSprite(mySprite, 100, 0)
+    timer.after(5000, function () {
+        controller.moveSprite(mySprite, 50, 0)
+    })
+    tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`transparency16`)
+})
+scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite, location) {
+    game.gameOver(true)
+})
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
+    game.gameOver(false)
+})
+function waterWave2 () {
+    waterWave = sprites.create(img`
         ....................
         88..................
         888.................
@@ -137,23 +150,10 @@ function waterWave () {
         888888888888888888.8
         88888888888888888888
         `, SpriteKind.Projectile)
-    waterWave2.setFlag(SpriteFlag.GhostThroughWalls, true)
-    waterWave2.setPosition(0, 180)
-    waterWave2.vx = 40
+    waterWave.setFlag(SpriteFlag.GhostThroughWalls, true)
+    waterWave.setPosition(0, 180)
+    waterWave.vx = 40
 }
-scene.onOverlapTile(SpriteKind.Player, assets.tile`myTile3`, function (sprite, location) {
-    controller.moveSprite(mySprite, 100, 0)
-    timer.after(5000, function () {
-        controller.moveSprite(mySprite, 50, 0)
-    })
-    tiles.setTileAt(mySprite.tilemapLocation(), assets.tile`transparency16`)
-})
-scene.onOverlapTile(SpriteKind.Player, sprites.dungeon.chestClosed, function (sprite, location) {
-    game.gameOver(true)
-})
-sprites.onOverlap(SpriteKind.Player, SpriteKind.Projectile, function (sprite, otherSprite) {
-    game.gameOver(false)
-})
 function movingDirection () {
     if (mySprite.vx > 0) {
         mySprite.setImage(img`
@@ -220,7 +220,7 @@ function player2 () {
     scene.cameraFollowSprite(mySprite)
     tiles.placeOnTile(mySprite, tiles.getTileLocation(3, 13))
 }
-let waterWave2: Sprite = null
+let waterWave: Sprite = null
 let mySprite: Sprite = null
 let jump = 0
 scene.setBackgroundImage(img`
@@ -348,7 +348,7 @@ scene.setBackgroundImage(img`
 tiles.setCurrentTilemap(tilemap`level2`)
 player2()
 jump = -150
-waterWave()
+waterWave2()
 game.onUpdate(function () {
     movingDirection()
 })
